@@ -13,6 +13,7 @@ from urllib.request import urlopen
 import pandas as pd
 from datetime import datetime
 import json
+import pytz
 
 url = "https://www.library.jhu.edu/wp-json/spacecapacity/v1/space/spc_827896044539871335"
 data_file = "library_data.csv"
@@ -27,7 +28,8 @@ data_json = json.loads(response.read())
 #data_all = pd.read_csv(data_file, encoding = "ISO-8859-1", error_bad_lines=False).loc[: , ['date','name','current_count','capacity','percentage']]
 
 #create DataFrame
-df = pd.DataFrame({'date': [datetime.utcnow()],
+tz = pytz.timezone('America/New_York')
+df = pd.DataFrame({'date': [datetime.now(tz)],
                     'current_count': [data_json['current_count']],
                     'percentage': [data_json['current_count'] / data_json['capacity']],
                     'capacity': [data_json['capacity']],
