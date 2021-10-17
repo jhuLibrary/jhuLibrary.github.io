@@ -17,7 +17,7 @@
     labels: [],
     datasets: [{
       data: [], // Set initially to empty data
-      label: "Temperature",
+      label: "people",
       borderColor: "#3e95cd",
       fill: false
     }]
@@ -26,7 +26,7 @@
     scales: {
       xAxes: [{
         type: "time",
-        distribution: "linear"
+        // distribution: "linear"
       }],
       title: {
         display: false
@@ -36,25 +36,25 @@
 };
 
 const ctx = document.querySelector("#line-chart").getContext("2d");
-const temperatureChart = new Chart(ctx, config);
+const peopleChart = new Chart(ctx, config);
 
 const csvToChartData = csv => {
   const lines = csv.trim().split("\n");
   lines.shift(); // remove titles (first line)
   return lines.map(line => {
-    const [date, temperature] = line.split(",");
+    const [date, people] = line.split(",");
     return {
       x: date,
-      y: temperature
+      y: people
     };
   });
 };
 
-const fetchCSV = () => fetch("https://raw.githubusercontent.com/CWrecker/jhuLibraryUsage/main/library_data_test.csv")
+const fetchCSV = () => fetch("https://raw.githubusercontent.com/CWrecker/jhuLibraryUsage/main/library_data.csv")
   .then(data => data.text())
   .then(csv => {
-    temperatureChart.data.datasets[0].data = csvToChartData(csv);
-    temperatureChart.update();
+    peopleChart.data.datasets[0].data = csvToChartData(csv);
+    peopleChart.update();
     setTimeout(fetchCSV, 5000); // Repeat every 5 sec
   });
 
