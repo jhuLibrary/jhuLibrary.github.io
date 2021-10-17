@@ -26,12 +26,13 @@
   options: {
     scales: {
       xAxes: [{
-        type: "time",
-        bounds: "data",
+        type: 'time',
+        bounds: 'data',
+        ticks.source: 'data',
         time: {
                     unit: 'hour'
                 },
-        distribution: "linear"
+        distribution: 'linear'
       }],
       title: {
         display: false
