@@ -12,7 +12,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.COVID }}
+          token: ${{ secrets.DATAFETCH }}
           
       - run: git config --global user.email "data@jhuLibrary.edu"
       - run: git config --global user.name "Automated Library Data"
@@ -36,5 +36,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.COVID }}
+          github_token: ${{ secrets.DATAFETCH }}
           branch: ${{ github.ref }}
