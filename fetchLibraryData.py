@@ -24,14 +24,14 @@ response = urlopen(url)
 # from url in data
 data_json = json.loads(response.read())
 
-data_all = pd.read_csv(data_file, encoding = "ISO-8859-1", error_bad_lines=False).loc[: , ['date','name','current_count','capacity','percentage']]
+#data_all = pd.read_csv(data_file, encoding = "ISO-8859-1", error_bad_lines=False).loc[: , ['date','name','current_count','capacity','percentage']]
 
 #create DataFrame
 df = pd.DataFrame({'date': [datetime.now().isoformat()],
-                   'name': [data_json['name']],
-                   'current_count': [data_json['current_count']],
-                   'capacity': [data_json['capacity']],
-                   'percentage': [data_json['current_count'] / data_json['capacity']]})
+                    'current_count': [data_json['current_count']],
+                    'percentage': [data_json['current_count'] / data_json['capacity']],
+                    'capacity': [data_json['capacity']],
+                   'name': [data_json['name']]})
 
 df.to_csv('library_data.csv', mode='a', index = False, header=False)
 
