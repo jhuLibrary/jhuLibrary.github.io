@@ -1,0 +1,41 @@
+name: covid_data_fetch
+on:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '15 12,0 * * *'
+jobs:
+  get-covid-data:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.COVID }}
+          
+      - run: git config --global user.email "beta@covideducationrecovery.global"
+      - run: git config --global user.name "Automated Covid Data"
+
+      
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 #install the python needed
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+        
+      - name: execute py script # run the run.py to get the latest data
+        run: |
+          cd data
+          python fetch_covid_data.py
+      - run: git pull
+      - run: git add .
+      - run: git commit -m "automated covid data update"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.COVID }}
+          branch: ${{ github.ref }}
