@@ -1,9 +1,9 @@
-name: covid_data_fetch
+name: library_data_fetch
 on:
   workflow_dispatch:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '15 12,0 * * *'
+    - cron:  '*/5 * * * *'
 jobs:
   get-covid-data:
     runs-on: ubuntu-latest
@@ -14,8 +14,8 @@ jobs:
         with:
           token: ${{ secrets.COVID }}
           
-      - run: git config --global user.email "beta@covideducationrecovery.global"
-      - run: git config --global user.name "Automated Covid Data"
+      - run: git config --global user.email "data@jhuLibrary.edu"
+      - run: git config --global user.name "Automated Library Data"
 
       
       - name: setup python
@@ -29,11 +29,10 @@ jobs:
         
       - name: execute py script # run the run.py to get the latest data
         run: |
-          cd data
-          python fetch_covid_data.py
+          python fetchLibraryData.py
       - run: git pull
       - run: git add .
-      - run: git commit -m "automated covid data update"
+      - run: git commit -m "automated library data update"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
