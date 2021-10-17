@@ -1,0 +1,62 @@
+
+<style>
+    #line-chart {
+  display: block;
+  width: 100%;
+}
+</style>
+
+<canvas id="line-chart"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<script>
+    const config = {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [{
+      data: [], // Set initially to empty data
+      label: "Temperature",
+      borderColor: "#3e95cd",
+      fill: false
+    }]
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        type: "time",
+        distribution: "linear"
+      }],
+      title: {
+        display: false
+      }
+    }
+  }
+};
+
+const ctx = document.querySelector("#line-chart").getContext("2d");
+const temperatureChart = new Chart(ctx, config);
+
+const csvToChartData = csv => {
+  const lines = csv.trim().split("\n");
+  lines.shift(); // remove titles (first line)
+  return lines.map(line => {
+    const [date, temperature] = line.split(",");
+    return {
+      x: date,
+      y: temperature
+    };
+  });
+};
+
+const fetchCSV = () => fetch("https://raw.githubusercontent.com/CWrecker/jhuLibraryUsage/main/library_data_test.csv")
+  .then(data => data.text())
+  .then(csv => {
+    temperatureChart.data.datasets[0].data = csvToChartData(csv);
+    temperatureChart.update();
+    setTimeout(fetchCSV, 5000); // Repeat every 5 sec
+  });
+
+fetchCSV(); // First fetch!
+</script>
